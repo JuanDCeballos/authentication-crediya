@@ -36,17 +36,17 @@ class MyReactiveRepositoryAdapterTest {
     @BeforeEach
     void initMocks() {
         userEntity = new UserEntity();
-        userEntity.setName("Sergio");
-        userEntity.setLastName("Agudelo");
-        userEntity.setEmail("correo@correo.com");
-        userEntity.setAddress("My Address 123");
+        userEntity.setName("Juan");
+        userEntity.setLastName("Ceballos");
+        userEntity.setEmail("juan.ceballos@correo.com");
+        userEntity.setAddress("CRA 97 AA #55-33");
         userEntity.setBaseSalary(BigDecimal.TEN);
 
         user = new User();
-        user.setName("Sergio");
-        user.setLastName("Agudelo");
-        user.setEmail("correo@correo.com");
-        user.setAddress("My Address 123");
+        user.setName("Juan");
+        user.setLastName("Ceballos");
+        user.setEmail("juan.ceballos@correo.com");
+        user.setAddress("CRA 97 AA #55-33");
         user.setBaseSalary(BigDecimal.TEN);
 
     }
