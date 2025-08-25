@@ -5,14 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
-public class ApiResponse<T> {
+public class ApiResponseDTO<T> {
     private int status;
     private String message;
-    private String path;
-    private String error;
+    private List<String> errors;
     private T data;
 }
