@@ -1,7 +1,6 @@
 package co.juan.crediya.api.dto;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,9 +25,8 @@ public class RegisterUserDTO {
     private String address;
     private String phone;
     @NotEmpty(message = "Email can't be empty")
+    @Email
     private String email;
     @NotNull(message = "baseSalary can't be null")
-    @DecimalMin(value = "0.0", inclusive = true)
-    @DecimalMax(value = "15000000.0", inclusive = true)
     private BigDecimal baseSalary;
 }
