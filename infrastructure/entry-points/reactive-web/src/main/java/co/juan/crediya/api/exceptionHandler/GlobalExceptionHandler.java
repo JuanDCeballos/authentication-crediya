@@ -1,6 +1,6 @@
 package co.juan.crediya.api.exceptionHandler;
 
-import co.juan.crediya.api.dto.ApiResponse;
+import co.juan.crediya.api.dto.ApiResponseDTO;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @Component
@@ -33,10 +34,10 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
         Map<String, Object> errorProperties = getErrorAttributes(request, ErrorAttributeOptions.defaults());
         int status = (int) errorProperties.getOrDefault("status", 500);
 
-        ApiResponse<Object> apiResponse = ApiResponse.builder().status(status)
+        ApiResponseDTO<Object> apiResponse = ApiResponseDTO.builder().status(status)
                 .message((String) errorProperties.get("message"))
-                .path((String) errorProperties.get("path"))
-                .error((String) errorProperties.get("error"))
+                .errors(Arrays.stream(((String) errorProperties.get("message"))
+                        .split(", ")).toList())
                 .build();
 
         return ServerResponse.status(status).contentType(MediaType.APPLICATION_JSON)
