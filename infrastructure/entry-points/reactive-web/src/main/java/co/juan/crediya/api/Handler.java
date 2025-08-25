@@ -58,13 +58,10 @@ public class Handler {
                 .map(userMapper::toUser)
                 .flatMap(userService::saveUser)
                 .flatMap(savedUser -> {
-                    ApiResponseDTO<User> response = new ApiResponseDTO<>(
-                            201,
-                            "User created successfully",
-                            serverRequest.path(),
-                            "Created",
-                            savedUser
-                    );
+                    ApiResponseDTO<Object> response = ApiResponseDTO.builder()
+                            .status(201)
+                            .message("User created successfully")
+                            .data(savedUser).build();
 
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)
