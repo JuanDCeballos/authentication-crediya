@@ -18,9 +18,11 @@ public class UserService {
     private final UserUseCase userUseCase;
 
     public Mono<User> saveUser(User user) {
-        return userUseCase.saveUser(user)
-                .doOnNext(savedUser -> log.info("User with email {} saved successfully", savedUser.getEmail()))
-                .doOnError(throwable -> log.error("Error saving user: {}", throwable.getMessage()))
+        return transactionalOperator.execute(transaction ->
+                        userUseCase.saveUser(user)
+                )
+                .doOnNext(savedUser -> log.info("User {} saved successfully.", savedUser.getName()))
+                .doOnError(throwable -> log.error("Error failed service transactional: SaveUser. {}", throwable.getMessage()))
                 .single();
     }
 
