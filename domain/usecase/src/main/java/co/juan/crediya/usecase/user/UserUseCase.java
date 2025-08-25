@@ -12,28 +12,17 @@ public class UserUseCase {
     private final UserRepository userRepository;
 
     public Mono<User> saveUser(User user) {
-        if (!Utils.validateField(user.getName())
-                || !Utils.validateField(user.getLastName())
-                || !Utils.validateEmail(user.getEmail())
-                || !Utils.validateMoney(user.getBaseSalary())) {
-            throw new IllegalArgumentException("Invalid user credentials");
+        if (!Utils.validateMoney(user.getBaseSalary())) {
+            throw new IllegalArgumentException("Base salary isn't within range");
         }
 
-        return existsByEmail(user.getEmail())
-                .flatMap(exists -> {
-                    if (Boolean.TRUE.equals(exists)) {
-                        return Mono.error(new IllegalArgumentException("Email already exists"));
-                    }
-
-                    return userRepository.save(user);
-                });
+        return userRepository.existsByEmail(user.getEmail())
+                .filter(exists -> !exists)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Email already exists")))
+                .then(userRepository.saveUser(user));
     }
 
     public final Flux<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public Mono<Boolean> existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return userRepository.findAllUsers();
     }
 }

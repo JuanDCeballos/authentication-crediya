@@ -22,7 +22,7 @@ public class UserService {
                         userUseCase.saveUser(user)
                 )
                 .doOnNext(savedUser -> log.info("User {} saved successfully.", savedUser.getName()))
-                .doOnError(throwable -> log.error("Error failed service transactional: SaveUser. {}", throwable.getMessage()))
+                .doOnError(throwable -> log.error("Error while trying to save the user: {}", throwable.getMessage()))
                 .single();
     }
 
