@@ -25,7 +25,7 @@ public class RegisterUserDTO {
     private String address;
     private String phone;
     @NotEmpty(message = "Email can't be empty")
-    @Email
+    @Email(message = "Email should be a valid email")
     private String email;
     @NotNull(message = "baseSalary can't be null")
     private BigDecimal baseSalary;
