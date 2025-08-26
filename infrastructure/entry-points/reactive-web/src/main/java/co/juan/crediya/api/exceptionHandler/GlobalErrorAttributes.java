@@ -1,5 +1,6 @@
 package co.juan.crediya.api.exceptionHandler;
 
+import co.juan.crediya.model.user.exception.CrediYaException;
 import jakarta.validation.ValidationException;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
@@ -28,7 +29,9 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
     }
 
     private int determineHttpStatus(Throwable error) {
-        if (error instanceof IllegalArgumentException || error instanceof ValidationException) {
+        if (error instanceof CrediYaException crediYaException) {
+            return crediYaException.getErrorCode().getCode();
+        } else if (error instanceof IllegalArgumentException || error instanceof ValidationException) {
             return HttpStatus.BAD_REQUEST.value();
         } else if (error instanceof IllegalStateException) {
             return HttpStatus.CONFLICT.value();
