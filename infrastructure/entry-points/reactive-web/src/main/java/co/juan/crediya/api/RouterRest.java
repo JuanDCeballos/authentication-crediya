@@ -18,10 +18,12 @@ public class RouterRest {
     @Bean
     @RouterOperations({
             @RouterOperation(path = "/api/v1/usuarios", method = RequestMethod.POST, beanClass = Handler.class, beanMethod = "listenSaveUser"),
-            @RouterOperation(path = "/api/v1/usuarios", method = RequestMethod.GET, beanClass = Handler.class, beanMethod = "listenGetAllUsers")
+            @RouterOperation(path = "/api/v1/usuarios", method = RequestMethod.GET, beanClass = Handler.class, beanMethod = "listenGetAllUsers"),
+            @RouterOperation(path = "/api/v1/usuarios/dni/{dni}", method = RequestMethod.GET, beanClass = Handler.class, beanMethod = "listenGetUserEmailByDni")
     })
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(POST("/api/v1/usuarios"), handler::listenSaveUser)
-                .andRoute(GET("/api/v1/usuarios"), handler::listenGetAllUsers);
+                .andRoute(GET("/api/v1/usuarios"), handler::listenGetAllUsers)
+                .andRoute(GET("/api/v1/usuarios/dni/{dni}"), handler::listenGetUserEmailByDni);
     }
 }
