@@ -26,10 +26,13 @@ public class UserEntity {
 
     @Column("birthdate")
     private LocalDateTime birthDate;
+
     private String address;
     private String phone;
     private String email;
 
     @Column("basesalary")
     private BigDecimal baseSalary;
+
+    private String dni;
 }
