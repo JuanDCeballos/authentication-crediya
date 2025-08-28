@@ -33,6 +33,7 @@ class UserUseCaseTest {
     UserRepository userRepository;
 
     private User user;
+    private final String email = "example@gmail.com";
 
     @BeforeEach
     void initMocks() {
@@ -43,12 +44,14 @@ class UserUseCaseTest {
         user.setEmail("juan.ceballos@correo.com");
         user.setAddress("CRA 97 AA #55-33");
         user.setBaseSalary(BigDecimal.TEN);
+        user.setDni("1234");
     }
 
     @Test
     void saveUser() {
         when(userRepository.saveUser(any(User.class))).thenReturn(Mono.just(user));
         when(userRepository.existsByEmail(anyString())).thenReturn(Mono.just(false));
+        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.empty());
 
         Mono<User> response = userUseCase.saveUser(user);
 
@@ -58,15 +61,16 @@ class UserUseCaseTest {
 
         verify(userRepository, times(1)).saveUser(any(User.class));
         verify(userRepository, times(1)).existsByEmail(anyString());
+        verify(userRepository, times(1)).findEmailByDni(anyString());
     }
 
     @Test
     void whenUserAlreadyExistByEmail_shouldReturnException() {
         when(userRepository.existsByEmail(anyString())).thenReturn(Mono.just(true));
+        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.just(email));
 
         Executable executable = () -> {
-            Mono<User> mono = userUseCase.saveUser(user);
-            mono.block();
+            userUseCase.saveUser(user).block();
         };
 
         CrediYaException exception = assertThrows(CrediYaException.class, executable);
@@ -74,6 +78,24 @@ class UserUseCaseTest {
 
         verify(userRepository, times(1)).existsByEmail(anyString());
         verify(userRepository, times(0)).saveUser(any(User.class));
+        verify(userRepository, times(1)).findEmailByDni(anyString());
+    }
+
+    @Test
+    void whenDniAlreadyExist_shouldReturnException() {
+        when(userRepository.existsByEmail(anyString())).thenReturn(Mono.just(false));
+        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.just(email));
+
+        Executable executable = () -> {
+            userUseCase.saveUser(user).block();
+        };
+
+        CrediYaException exception = assertThrows(CrediYaException.class, executable);
+        assertEquals("DNI already exist.", exception.getMessage());
+
+        verify(userRepository, times(1)).existsByEmail(anyString());
+        verify(userRepository, times(0)).saveUser(any(User.class));
+        verify(userRepository, times(1)).findEmailByDni(anyString());
     }
 
     @Test
@@ -117,5 +139,18 @@ class UserUseCaseTest {
                 .verifyComplete();
 
         verify(userRepository, times(1)).findAllUsers();
+    }
+
+    @Test
+    void getUserEmailById() {
+        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.just(email));
+
+        Mono<String> response = userUseCase.getUserEmailById(email);
+
+        StepVerifier.create(response)
+                .expectNextMatches(value -> value.equals(email))
+                .verifyComplete();
+
+        verify(userRepository, times(1)).findEmailByDni(anyString());
     }
 }

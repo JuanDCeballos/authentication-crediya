@@ -29,4 +29,8 @@ public class UserService {
     public Flux<User> getAllUsers() {
         return userUseCase.getAllUsers();
     }
+
+    public Mono<String> getUserEmailByDni(String dni) {
+        return userUseCase.getUserEmailById(dni);
+    }
 }
