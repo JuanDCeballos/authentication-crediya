@@ -14,9 +14,9 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
         User,
         UserEntity,
         Long,
-        MyReactiveRepository
+        UserReactiveRepository
         > implements UserRepository {
-    public UserReactiveRepositoryAdapter(MyReactiveRepository repository, ObjectMapper mapper) {
+    public UserReactiveRepositoryAdapter(UserReactiveRepository repository, ObjectMapper mapper) {
         super(repository, mapper, d -> mapper.map(d, User.class));
     }
 
@@ -33,5 +33,10 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     @Override
     public Mono<Boolean> existsByEmail(String email) {
         return repository.existsByEmail(email);
+    }
+
+    @Override
+    public Mono<String> findEmailByDni(String dni) {
+        return repository.findEmailByDni(dni);
     }
 }

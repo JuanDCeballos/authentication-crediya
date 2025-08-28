@@ -25,7 +25,7 @@ class UserReactiveRepositoryAdapterTest {
     UserReactiveRepositoryAdapter repositoryAdapter;
 
     @Mock
-    MyReactiveRepository repository;
+    UserReactiveRepository repository;
 
     @Mock
     ObjectMapper mapper;
@@ -69,7 +69,7 @@ class UserReactiveRepositoryAdapterTest {
         when(repository.findAll()).thenReturn(Flux.just(userEntity));
         when(mapper.map(userEntity, User.class)).thenReturn(user);
 
-        Flux<User> result = repositoryAdapter.findAll();
+        Flux<User> result = repositoryAdapter.findAllUsers();
 
         StepVerifier.create(result)
                 .expectNextMatches(value -> value.equals(user))
@@ -82,7 +82,7 @@ class UserReactiveRepositoryAdapterTest {
         when(repository.save(any(UserEntity.class))).thenReturn(Mono.just(userEntity));
         when(mapper.map(userEntity, User.class)).thenReturn(user);
 
-        Mono<User> result = repositoryAdapter.save(user);
+        Mono<User> result = repositoryAdapter.saveUser(user);
 
         StepVerifier.create(result)
                 .expectNextMatches(value -> value.equals(user))
@@ -99,6 +99,19 @@ class UserReactiveRepositoryAdapterTest {
 
         StepVerifier.create(result)
                 .expectNextMatches(value -> value.equals(true))
+                .verifyComplete();
+    }
+
+    @Test
+    void findEmailByDni() {
+        String dni = "1234";
+
+        when(repository.findEmailByDni(anyString())).thenReturn(Mono.just(dni));
+
+        Mono<String> result = repositoryAdapter.findEmailByDni(dni);
+
+        StepVerifier.create(result)
+                .expectNextMatches(value -> value.equals(dni))
                 .verifyComplete();
     }
 }
