@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ApiResponseDTO<T> {
-    private int status;
+    private String status;
     private String message;
     private List<String> errors;
     private T data;
