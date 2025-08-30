@@ -1,5 +1,6 @@
 package co.juan.crediya.r2dbc.service;
 
+import co.juan.crediya.constants.OperationMessages;
 import co.juan.crediya.model.user.User;
 import co.juan.crediya.usecase.user.UserUseCase;
 import lombok.AllArgsConstructor;
@@ -21,8 +22,8 @@ public class UserService {
         return transactionalOperator.execute(transaction ->
                         userUseCase.saveUser(user)
                 )
-                .doOnNext(savedUser -> log.info("User {} saved successfully.", savedUser.getName()))
-                .doOnError(throwable -> log.error("Error while trying to save the user: {}", throwable.getMessage()))
+                .doOnNext(savedUser -> log.info(OperationMessages.SAVE_OPERATION_SUCCESS.getMessage(), savedUser.toString()))
+                .doOnError(throwable -> log.error(OperationMessages.SAVE_OPERATION_ERROR.getMessage(), throwable.getMessage()))
                 .single();
     }
 
