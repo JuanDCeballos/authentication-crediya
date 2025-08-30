@@ -29,20 +29,13 @@ public class UserUseCase {
                 .hasElement();
 
         return Mono.zip(emailExists, dniExists)
-                .flatMap(result -> {
-                    boolean emailAlreadyExists = result.getT1();
-                    boolean dniAlreadyExists = result.getT2();
-
-                    if (emailAlreadyExists) {
-                        return Mono.error(new CrediYaException(ErrorCode.EMAIL_ALREADY_EXISTS));
-                    }
-
-                    if (dniAlreadyExists) {
-                        return Mono.error(new CrediYaException(ErrorCode.DNI_ALREADY_EXISTS));
-                    }
-
-                    return userRepository.saveUser(user);
-                });
+                .filter(tuple -> !tuple.getT1())
+                .switchIfEmpty(Mono.error(new CrediYaException(ErrorCode.EMAIL_ALREADY_EXISTS)))
+                .filter(tuple -> !tuple.getT2())
+                .switchIfEmpty(Mono.error(new CrediYaException(ErrorCode.DNI_ALREADY_EXISTS)))
+                .flatMap(result ->
+                        userRepository.saveUser(user)
+                );
     }
 
     public final Flux<User> getAllUsers() {
