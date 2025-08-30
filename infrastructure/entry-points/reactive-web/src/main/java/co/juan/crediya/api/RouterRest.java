@@ -1,5 +1,7 @@
 package co.juan.crediya.api;
 
+import co.juan.crediya.api.config.AuthPath;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +15,10 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
+@RequiredArgsConstructor
 public class RouterRest {
+
+    private final AuthPath authPath;
 
     @Bean
     @RouterOperations({
@@ -22,8 +27,8 @@ public class RouterRest {
             @RouterOperation(path = "/api/v1/usuarios/dni/{dni}", method = RequestMethod.GET, beanClass = Handler.class, beanMethod = "listenGetUserEmailByDni")
     })
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
-        return route(POST("/api/v1/usuarios"), handler::listenSaveUser)
-                .andRoute(GET("/api/v1/usuarios"), handler::listenGetAllUsers)
-                .andRoute(GET("/api/v1/usuarios/dni/{dni}"), handler::listenGetUserEmailByDni);
+        return route(POST(authPath.getUsuarios()), handler::listenSaveUser)
+                .andRoute(GET(authPath.getUsuarios()), handler::listenGetAllUsers)
+                .andRoute(GET(authPath.getUsuarioByDni()), handler::listenGetUserEmailByDni);
     }
 }
