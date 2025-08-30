@@ -4,6 +4,7 @@ import co.juan.crediya.api.dto.ApiResponseDTO;
 import co.juan.crediya.api.dto.RegisterUserDTO;
 import co.juan.crediya.api.utils.UserMapper;
 import co.juan.crediya.api.utils.ValidationService;
+import co.juan.crediya.constants.OperationMessages;
 import co.juan.crediya.model.user.User;
 import co.juan.crediya.model.user.exception.CrediYaException;
 import co.juan.crediya.model.user.exception.ErrorCode;
@@ -59,12 +60,13 @@ public class Handler {
     public Mono<ServerResponse> listenSaveUser(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(RegisterUserDTO.class)
                 .flatMap(validationService::validateObject)
+                .doOnNext(req -> log.info(OperationMessages.REQUEST_RECEIVED.getMessage(), req.toString()))
                 .map(userMapper::toUser)
                 .flatMap(userService::saveUser)
                 .flatMap(savedUser -> {
                     ApiResponseDTO<Object> response = ApiResponseDTO.builder()
-                            .status(201)
-                            .message("User created successfully")
+                            .status("201")
+                            .message(OperationMessages.RECORD_CREATED_SUCCESSFULLY.getMessage())
                             .data(savedUser).build();
 
                     return ok()
@@ -108,8 +110,8 @@ public class Handler {
                 .switchIfEmpty(Mono.error(new CrediYaException(ErrorCode.USER_NOT_FOUND)))
                 .flatMap(userEmail -> {
                     ApiResponseDTO<Object> response = ApiResponseDTO.builder()
-                            .status(200)
-                            .message("User exists")
+                            .status("200")
+                            .message(OperationMessages.USER_FOUND.getMessage())
                             .data(userEmail).build();
                     return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(response);
                 });
