@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 @ConfigurationProperties(prefix = "routes.paths")
 public class AuthPath {
+    private String version;
     private String usuarios;
     private String usuarioByDni;
+    private String login;
 }
