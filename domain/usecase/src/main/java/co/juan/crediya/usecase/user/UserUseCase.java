@@ -1,8 +1,8 @@
 package co.juan.crediya.usecase.user;
 
 import co.juan.crediya.model.user.User;
-import co.juan.crediya.model.user.exception.CrediYaException;
-import co.juan.crediya.model.user.exception.ErrorCode;
+import co.juan.crediya.model.exception.CrediYaException;
+import co.juan.crediya.model.exception.ErrorCode;
 import co.juan.crediya.model.user.gateways.UserRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;

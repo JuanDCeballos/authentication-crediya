@@ -1,7 +1,7 @@
 package co.juan.crediya.usecase.user;
 
 import co.juan.crediya.model.user.User;
-import co.juan.crediya.model.user.exception.CrediYaException;
+import co.juan.crediya.model.exception.CrediYaException;
 import co.juan.crediya.model.user.gateways.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
