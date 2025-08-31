@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -26,6 +27,9 @@ class UserReactiveRepositoryAdapterTest {
 
     @Mock
     UserReactiveRepository repository;
+
+    @Mock
+    PasswordEncoder passwordEncoder;
 
     @Mock
     ObjectMapper mapper;
