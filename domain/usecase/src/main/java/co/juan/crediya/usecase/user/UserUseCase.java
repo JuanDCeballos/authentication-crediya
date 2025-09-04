@@ -25,7 +25,7 @@ public class UserUseCase {
         }
 
         Mono<Boolean> emailExists = userRepository.existsByEmail(user.getEmail());
-        Mono<Boolean> dniExists = userRepository.findEmailByDni(user.getDni())
+        Mono<Boolean> dniExists = userRepository.findUserByDni(user.getDni())
                 .hasElement();
 
         return Mono.zip(emailExists, dniExists)
@@ -42,7 +42,7 @@ public class UserUseCase {
         return userRepository.findAllUsers();
     }
 
-    public Mono<String> getUserEmailById(String dni) {
-        return userRepository.findEmailByDni(dni);
+    public Mono<User> findUserByDni(String dni) {
+        return userRepository.findUserByDni(dni);
     }
 }

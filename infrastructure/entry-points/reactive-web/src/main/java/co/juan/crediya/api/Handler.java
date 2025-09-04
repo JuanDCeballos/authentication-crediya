@@ -115,15 +115,15 @@ public class Handler {
             }
     )
     @PreAuthorize("hasAuthority('CUSTOMER')")
-    public Mono<ServerResponse> listenGetUserEmailByDni(ServerRequest request) {
+    public Mono<ServerResponse> listenGetUserByDni(ServerRequest request) {
         String dni = request.pathVariable("dni");
-        return userService.getUserEmailByDni(dni)
+        return userService.findUserByDni(dni)
                 .switchIfEmpty(Mono.error(new CrediYaException(ErrorCode.USER_NOT_FOUND)))
-                .flatMap(userEmail -> {
+                .flatMap(user -> {
                     ApiResponseDTO<Object> response = ApiResponseDTO.builder()
                             .status("200")
                             .message(OperationMessages.USER_FOUND.getMessage())
-                            .data(userEmail).build();
+                            .data(user).build();
                     return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(response);
                 });
     }

@@ -30,7 +30,7 @@ public class RouterRest {
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(POST(authPath.getVersion() + authPath.getUsuarios()), handler::listenSaveUser)
                 .andRoute(GET(authPath.getVersion() + authPath.getUsuarios()), handler::listenGetAllUsers)
-                .andRoute(GET(authPath.getVersion() + authPath.getUsuarioByDni()), handler::listenGetUserEmailByDni)
+                .andRoute(GET(authPath.getVersion() + authPath.getUsuarioByDni()), handler::listenGetUserByDni)
                 .andRoute(POST(authPath.getVersion() + authPath.getLogin()), handler::listenPostLogin);
     }
 }
