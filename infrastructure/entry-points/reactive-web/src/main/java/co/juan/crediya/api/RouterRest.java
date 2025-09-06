@@ -31,6 +31,7 @@ public class RouterRest {
         return route(POST(authPath.getVersion() + authPath.getUsuarios()), handler::listenSaveUser)
                 .andRoute(GET(authPath.getVersion() + authPath.getUsuarios()), handler::listenGetAllUsers)
                 .andRoute(GET(authPath.getVersion() + authPath.getUsuarioByDni()), handler::listenGetUserByDni)
-                .andRoute(POST(authPath.getVersion() + authPath.getLogin()), handler::listenPostLogin);
+                .andRoute(POST(authPath.getVersion() + authPath.getLogin()), handler::listenPostLogin)
+                .andRoute(GET(authPath.getVersion() + authPath.getUsuarioByEmail()), handler::listenGetUserByEmail);
     }
 }

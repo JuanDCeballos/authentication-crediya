@@ -34,4 +34,8 @@ public class UserService {
     public Mono<User> findUserByDni(String dni) {
         return userUseCase.findUserByDni(dni);
     }
+
+    public Mono<User> findUserByEmail(String dni) {
+        return userUseCase.findUserByEmail(dni);
+    }
 }

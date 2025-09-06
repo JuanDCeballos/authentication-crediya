@@ -45,4 +45,8 @@ public class UserUseCase {
     public Mono<User> findUserByDni(String dni) {
         return userRepository.findUserByDni(dni);
     }
+
+    public Mono<User> findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
 }

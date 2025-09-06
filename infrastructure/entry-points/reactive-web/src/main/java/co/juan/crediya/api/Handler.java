@@ -128,6 +128,20 @@ public class Handler {
                 });
     }
 
+    @PreAuthorize("hasAuthority('CUSTOMER')")
+    public Mono<ServerResponse> listenGetUserByEmail(ServerRequest request) {
+        String email = request.pathVariable("email");
+        return userService.findUserByEmail(email)
+                .switchIfEmpty(Mono.error(new CrediYaException(ErrorCode.USER_NOT_FOUND)))
+                .flatMap(user -> {
+                    ApiResponseDTO<Object> response = ApiResponseDTO.builder()
+                            .status("200")
+                            .message(OperationMessages.USER_FOUND.getMessage())
+                            .data(user).build();
+                    return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(response);
+                });
+    }
+
     @Operation(
             operationId = "loginUser",
             responses = {

@@ -14,5 +14,8 @@ public interface UserReactiveRepository extends ReactiveCrudRepository<UserEntit
     @Query("SELECT * FROM users WHERE dni = :dni")
     Mono<User> findUserByDni(String dni);
 
+    @Query("SELECT * FROM users WHERE email = :email")
+    Mono<User> findUserByEmail(String email);
+
     Mono<UserEntity> findByEmail(String email);
 }
