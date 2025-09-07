@@ -1,7 +1,7 @@
 package co.juan.crediya.usecase.user;
 
 import co.juan.crediya.model.user.User;
-import co.juan.crediya.model.user.exception.CrediYaException;
+import co.juan.crediya.model.exception.CrediYaException;
 import co.juan.crediya.model.user.gateways.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,6 @@ class UserUseCaseTest {
     UserRepository userRepository;
 
     private User user;
-    private final String email = "example@gmail.com";
 
     @BeforeEach
     void initMocks() {
@@ -51,7 +50,7 @@ class UserUseCaseTest {
     void saveUser() {
         when(userRepository.saveUser(any(User.class))).thenReturn(Mono.just(user));
         when(userRepository.existsByEmail(anyString())).thenReturn(Mono.just(false));
-        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.empty());
+        when(userRepository.findUserByDni(anyString())).thenReturn(Mono.empty());
 
         Mono<User> response = userUseCase.saveUser(user);
 
@@ -61,41 +60,37 @@ class UserUseCaseTest {
 
         verify(userRepository, times(1)).saveUser(any(User.class));
         verify(userRepository, times(1)).existsByEmail(anyString());
-        verify(userRepository, times(1)).findEmailByDni(anyString());
+        verify(userRepository, times(1)).findUserByDni(anyString());
     }
 
     @Test
     void whenUserAlreadyExistByEmail_shouldReturnException() {
         when(userRepository.existsByEmail(anyString())).thenReturn(Mono.just(true));
-        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.just(email));
+        when(userRepository.findUserByDni(anyString())).thenReturn(Mono.just(user));
 
-        Executable executable = () -> {
-            userUseCase.saveUser(user).block();
-        };
+        Executable executable = () -> userUseCase.saveUser(user).block();
 
         CrediYaException exception = assertThrows(CrediYaException.class, executable);
         assertEquals("Email already exist.", exception.getMessage());
 
         verify(userRepository, times(1)).existsByEmail(anyString());
         verify(userRepository, times(0)).saveUser(any(User.class));
-        verify(userRepository, times(1)).findEmailByDni(anyString());
+        verify(userRepository, times(1)).findUserByDni(anyString());
     }
 
     @Test
     void whenDniAlreadyExist_shouldReturnException() {
         when(userRepository.existsByEmail(anyString())).thenReturn(Mono.just(false));
-        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.just(email));
+        when(userRepository.findUserByDni(anyString())).thenReturn(Mono.just(user));
 
-        Executable executable = () -> {
-            userUseCase.saveUser(user).block();
-        };
+        Executable executable = () -> userUseCase.saveUser(user).block();
 
         CrediYaException exception = assertThrows(CrediYaException.class, executable);
         assertEquals("DNI already exist.", exception.getMessage());
 
         verify(userRepository, times(1)).existsByEmail(anyString());
         verify(userRepository, times(0)).saveUser(any(User.class));
-        verify(userRepository, times(1)).findEmailByDni(anyString());
+        verify(userRepository, times(1)).findUserByDni(anyString());
     }
 
     @Test
@@ -142,15 +137,30 @@ class UserUseCaseTest {
     }
 
     @Test
-    void getUserEmailById() {
-        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.just(email));
+    void getUserByDni() {
+        when(userRepository.findUserByDni(anyString())).thenReturn(Mono.just(user));
 
-        Mono<String> response = userUseCase.getUserEmailById(email);
+        String dni = "123";
+        Mono<User> response = userUseCase.findUserByDni(dni);
 
         StepVerifier.create(response)
-                .expectNextMatches(value -> value.equals(email))
+                .expectNextMatches(value -> value.equals(user))
                 .verifyComplete();
 
-        verify(userRepository, times(1)).findEmailByDni(anyString());
+        verify(userRepository, times(1)).findUserByDni(anyString());
+    }
+
+    @Test
+    void getUserByEmail() {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Mono.just(user));
+
+        String email = "example@gmail.com";
+        Mono<User> response = userUseCase.findUserByEmail(email);
+
+        StepVerifier.create(response)
+                .expectNextMatches(value -> value.equals(user))
+                .verifyComplete();
+
+        verify(userRepository, times(1)).findUserByEmail(anyString());
     }
 }

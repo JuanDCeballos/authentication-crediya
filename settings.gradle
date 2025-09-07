@@ -26,3 +26,5 @@ include ':r2dbc-postgresql'
 project(':r2dbc-postgresql').projectDir = file('./infrastructure/driven-adapters/r2dbc-postgresql')
 include ':constants'
 project(':constants').projectDir = file('./infrastructure/helpers/constants')
+include ':security'
+project(':security').projectDir = file('./infrastructure/driven-adapters/security')
