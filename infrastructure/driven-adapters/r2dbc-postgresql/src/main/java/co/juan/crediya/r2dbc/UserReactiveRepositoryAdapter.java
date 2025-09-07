@@ -53,8 +53,13 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     }
 
     @Override
-    public Mono<String> findEmailByDni(String dni) {
-        return repository.findEmailByDni(dni);
+    public Mono<User> findUserByDni(String dni) {
+        return repository.findUserByDni(dni);
+    }
+
+    @Override
+    public Mono<User> findUserByEmail(String email) {
+        return repository.findUserByEmail(email);
     }
 
     @Override
