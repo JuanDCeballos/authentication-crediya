@@ -103,11 +103,11 @@ public class Handler {
     }
 
     @Operation(
-            operationId = "getUserEmailByDni",
+            operationId = "getUserByDni",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "get user email from user dni successfully.",
+                            description = "get user by dni successfully.",
                             content = @Content(
                                     schema = @Schema(implementation = ApiResponseDTO.class)
                             )
@@ -128,6 +128,18 @@ public class Handler {
                 });
     }
 
+    @Operation(
+            operationId = "getUserByEmail",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "get user by email successfully.",
+                            content = @Content(
+                                    schema = @Schema(implementation = ApiResponseDTO.class)
+                            )
+                    )
+            }
+    )
     @PreAuthorize("hasAuthority('CUSTOMER')")
     public Mono<ServerResponse> listenGetUserByEmail(ServerRequest request) {
         String email = request.pathVariable("email");
