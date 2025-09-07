@@ -24,8 +24,9 @@ public class RouterRest {
     @RouterOperations({
             @RouterOperation(path = "/api/v1/usuarios", method = RequestMethod.POST, beanClass = Handler.class, beanMethod = "listenSaveUser"),
             @RouterOperation(path = "/api/v1/usuarios", method = RequestMethod.GET, beanClass = Handler.class, beanMethod = "listenGetAllUsers"),
-            @RouterOperation(path = "/api/v1/usuarios/dni/{dni}", method = RequestMethod.GET, beanClass = Handler.class, beanMethod = "listenGetUserEmailByDni"),
-            @RouterOperation(path = "/api/v1/login", method = RequestMethod.POST, beanClass = Handler.class, beanMethod = "listenPostLogin")
+            @RouterOperation(path = "/api/v1/usuarios/dni/{dni}", method = RequestMethod.GET, beanClass = Handler.class, beanMethod = "listenGetUserByDni"),
+            @RouterOperation(path = "/api/v1/login", method = RequestMethod.POST, beanClass = Handler.class, beanMethod = "listenPostLogin"),
+            @RouterOperation(path = "/api/v1/usuarios/email/{email}", method = RequestMethod.GET, beanClass = Handler.class, beanMethod = "listenGetUserByEmail")
     })
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(POST(authPath.getVersion() + authPath.getUsuarios()), handler::listenSaveUser)
