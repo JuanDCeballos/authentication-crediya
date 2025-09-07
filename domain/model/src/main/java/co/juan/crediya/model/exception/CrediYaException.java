@@ -1,4 +1,4 @@
-package co.juan.crediya.model.user.exception;
+package co.juan.crediya.model.exception;
 
 import lombok.Getter;
 

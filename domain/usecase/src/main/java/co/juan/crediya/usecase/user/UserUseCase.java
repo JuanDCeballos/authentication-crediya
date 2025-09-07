@@ -1,8 +1,8 @@
 package co.juan.crediya.usecase.user;
 
 import co.juan.crediya.model.user.User;
-import co.juan.crediya.model.user.exception.CrediYaException;
-import co.juan.crediya.model.user.exception.ErrorCode;
+import co.juan.crediya.model.exception.CrediYaException;
+import co.juan.crediya.model.exception.ErrorCode;
 import co.juan.crediya.model.user.gateways.UserRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -25,7 +25,7 @@ public class UserUseCase {
         }
 
         Mono<Boolean> emailExists = userRepository.existsByEmail(user.getEmail());
-        Mono<Boolean> dniExists = userRepository.findEmailByDni(user.getDni())
+        Mono<Boolean> dniExists = userRepository.findUserByDni(user.getDni())
                 .hasElement();
 
         return Mono.zip(emailExists, dniExists)
@@ -42,7 +42,11 @@ public class UserUseCase {
         return userRepository.findAllUsers();
     }
 
-    public Mono<String> getUserEmailById(String dni) {
-        return userRepository.findEmailByDni(dni);
+    public Mono<User> findUserByDni(String dni) {
+        return userRepository.findUserByDni(dni);
+    }
+
+    public Mono<User> findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
     }
 }

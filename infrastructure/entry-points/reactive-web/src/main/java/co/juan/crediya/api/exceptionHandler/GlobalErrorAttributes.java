@@ -1,7 +1,7 @@
 package co.juan.crediya.api.exceptionHandler;
 
-import co.juan.crediya.model.user.exception.CrediYaException;
-import co.juan.crediya.model.user.exception.ErrorCode;
+import co.juan.crediya.model.exception.CrediYaException;
+import co.juan.crediya.model.exception.ErrorCode;
 import jakarta.validation.ValidationException;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;

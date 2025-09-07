@@ -8,7 +8,9 @@ public enum OperationMessages {
     SAVE_OPERATION_SUCCESS("Entity saved successfully {}"),
     SAVE_OPERATION_ERROR("Error while saving entity {}"),
     RECORD_CREATED_SUCCESSFULLY("Record created successfully"),
-    USER_FOUND("User found");
+    USER_FOUND("User found"),
+    USER_EXISTS("User exists"),
+    LOGIN_OK("User logged successful");
 
 
     private final String message;
