@@ -33,6 +33,7 @@ class UserServiceTest {
 
     private User user;
     private final String email = "example@gmail.com";
+    private final String dni = "1234";
 
     @BeforeEach
     void initMocks() {
@@ -106,15 +107,28 @@ class UserServiceTest {
     }
 
     @Test
-    void getUserEmailByDni() {
-        when(userUseCase.getUserEmailById(anyString())).thenReturn(Mono.just(email));
+    void findUserByDni() {
+        when(userUseCase.findUserByDni(anyString())).thenReturn(Mono.just(user));
 
-        Mono<String> result = userService.getUserEmailByDni(email);
+        Mono<User> result = userService.findUserByDni(dni);
 
         StepVerifier.create(result)
-                .expectNext(email)
+                .expectNext(user)
                 .verifyComplete();
 
-        verify(userUseCase).getUserEmailById(anyString());
+        verify(userUseCase).findUserByDni(anyString());
+    }
+
+    @Test
+    void findUserByEmail() {
+        when(userUseCase.findUserByEmail(anyString())).thenReturn(Mono.just(user));
+
+        Mono<User> result = userService.findUserByEmail(email);
+
+        StepVerifier.create(result)
+                .expectNext(user)
+                .verifyComplete();
+
+        verify(userUseCase).findUserByEmail(anyString());
     }
 }

@@ -34,6 +34,7 @@ class UserUseCaseTest {
 
     private User user;
     private final String email = "example@gmail.com";
+    private final String dni = "123";
 
     @BeforeEach
     void initMocks() {
@@ -51,7 +52,7 @@ class UserUseCaseTest {
     void saveUser() {
         when(userRepository.saveUser(any(User.class))).thenReturn(Mono.just(user));
         when(userRepository.existsByEmail(anyString())).thenReturn(Mono.just(false));
-        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.empty());
+        when(userRepository.findUserByDni(anyString())).thenReturn(Mono.empty());
 
         Mono<User> response = userUseCase.saveUser(user);
 
@@ -61,13 +62,13 @@ class UserUseCaseTest {
 
         verify(userRepository, times(1)).saveUser(any(User.class));
         verify(userRepository, times(1)).existsByEmail(anyString());
-        verify(userRepository, times(1)).findEmailByDni(anyString());
+        verify(userRepository, times(1)).findUserByDni(anyString());
     }
 
     @Test
     void whenUserAlreadyExistByEmail_shouldReturnException() {
         when(userRepository.existsByEmail(anyString())).thenReturn(Mono.just(true));
-        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.just(email));
+        when(userRepository.findUserByDni(anyString())).thenReturn(Mono.just(user));
 
         Executable executable = () -> {
             userUseCase.saveUser(user).block();
@@ -78,13 +79,13 @@ class UserUseCaseTest {
 
         verify(userRepository, times(1)).existsByEmail(anyString());
         verify(userRepository, times(0)).saveUser(any(User.class));
-        verify(userRepository, times(1)).findEmailByDni(anyString());
+        verify(userRepository, times(1)).findUserByDni(anyString());
     }
 
     @Test
     void whenDniAlreadyExist_shouldReturnException() {
         when(userRepository.existsByEmail(anyString())).thenReturn(Mono.just(false));
-        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.just(email));
+        when(userRepository.findUserByDni(anyString())).thenReturn(Mono.just(user));
 
         Executable executable = () -> {
             userUseCase.saveUser(user).block();
@@ -95,7 +96,7 @@ class UserUseCaseTest {
 
         verify(userRepository, times(1)).existsByEmail(anyString());
         verify(userRepository, times(0)).saveUser(any(User.class));
-        verify(userRepository, times(1)).findEmailByDni(anyString());
+        verify(userRepository, times(1)).findUserByDni(anyString());
     }
 
     @Test
@@ -142,15 +143,28 @@ class UserUseCaseTest {
     }
 
     @Test
-    void getUserEmailById() {
-        when(userRepository.findEmailByDni(anyString())).thenReturn(Mono.just(email));
+    void getUserByDni() {
+        when(userRepository.findUserByDni(anyString())).thenReturn(Mono.just(user));
 
-        Mono<String> response = userUseCase.getUserEmailById(email);
+        Mono<User> response = userUseCase.findUserByDni(dni);
 
         StepVerifier.create(response)
-                .expectNextMatches(value -> value.equals(email))
+                .expectNextMatches(value -> value.equals(user))
                 .verifyComplete();
 
-        verify(userRepository, times(1)).findEmailByDni(anyString());
+        verify(userRepository, times(1)).findUserByDni(anyString());
+    }
+
+    @Test
+    void getUserByEmail() {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Mono.just(user));
+
+        Mono<User> response = userUseCase.findUserByEmail(email);
+
+        StepVerifier.create(response)
+                .expectNextMatches(value -> value.equals(user))
+                .verifyComplete();
+
+        verify(userRepository, times(1)).findUserByEmail(anyString());
     }
 }
