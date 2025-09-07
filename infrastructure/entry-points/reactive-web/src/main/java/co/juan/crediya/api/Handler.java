@@ -7,8 +7,6 @@ import co.juan.crediya.api.utils.LoginMapper;
 import co.juan.crediya.api.utils.UserMapper;
 import co.juan.crediya.api.utils.ValidationService;
 import co.juan.crediya.constants.OperationMessages;
-import co.juan.crediya.model.dto.LogInDTO;
-import co.juan.crediya.model.dto.TokenDTO;
 import co.juan.crediya.model.user.User;
 import co.juan.crediya.model.exception.CrediYaException;
 import co.juan.crediya.model.exception.ErrorCode;
