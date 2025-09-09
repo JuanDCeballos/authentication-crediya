@@ -112,7 +112,7 @@ public class Handler {
                     )
             }
     )
-    @PreAuthorize("hasAuthority('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER') or hasAuthority('ADVISOR')")
     public Mono<ServerResponse> listenGetUserByDni(ServerRequest request) {
         String dni = request.pathVariable("dni");
         return userService.findUserByDni(dni)
@@ -138,7 +138,7 @@ public class Handler {
                     )
             }
     )
-    @PreAuthorize("hasAuthority('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER') or hasAuthority('ADVISOR')")
     public Mono<ServerResponse> listenGetUserByEmail(ServerRequest request) {
         String email = request.pathVariable("email");
         return userService.findUserByEmail(email)
